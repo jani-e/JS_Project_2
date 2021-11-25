@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="author" content="Jani Eriksson">
     <link rel="stylesheet" href="CSS/styles.css">
+    <script src="JS/hideMe.js"></script> <!--apikey temporary solution-->
     <script src="JS/script.js" defer></script>
     <link rel="icon" href="Images/favicon.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +12,32 @@
     <title>JS project: Ajax</title>
 </head>
 <body>
-    <div id="testdiv">Ajax data here</div>
+    <header class="flex-container">
+        <div>
+            <h1>Project2</h1>
+        </div>
+        <div>
+            searchbox
+        </div>
+    </header>
+    <main class="flex-container">
+        <aside>
+            <h2>Top Artists</h2>
+            <div id="testdiv">Ajax data here</div>
+        </aside>
+        <section>
+            <div>
+                <h2>Info: Artist.name + artist.picture</h2>
+            </div>
+            <div class="flex-container">
+                <div>
+                    <h3>albums of the artist</h3>
+                </div>
+                <div>
+                    <h3>songs of the album</h3>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
