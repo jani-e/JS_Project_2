@@ -25,22 +25,43 @@ function testLastFM() {
         }
     }
 }
-let data = null;
+let artistsData = null;
 function getTopArtists() {
+    let ul = document.getElementById('topArtists');
     const url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=" + api + "&format=json";
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            data = JSON.parse(xmlhttp.responseText);
-            let list = "<ul>";
-            console.log(data)
-            for (i = 0; i < data.artists.artist.length; i++) {
-                list += "<li>" + data.artists.artist[i].name + "</li>";
+            artistsData = JSON.parse(xmlhttp.responseText);
+            ul.removeChild(ul.childNodes[1]);
+            for (let i = 0; i < artistsData.artists.artist.length; i++) {
+                let listItem = document.createElement('li');
+                let artistIndex = document.createElement('span');
+                let artistName = document.createElement('span');
+                artistIndex.innerHTML = "[" + (i + 1) + "] ";
+                artistIndex.setAttribute('class', 'artistIndex');
+                artistName.innerHTML = artistsData.artists.artist[i].name;
+                listItem.appendChild(artistIndex);
+                listItem.appendChild(artistName);
+                ul.appendChild(listItem);
             }
-            list += "</ul>";
-            targetdiv.innerHTML = list;
+            listenArtist();
         }
     }
 }
+let body = document.body;
+body.addEventListener("load", getTopArtists());
+
+function listenArtist() {
+    let artists = document.getElementById('topArtists').children;
+    for (let i = 0; i < artists.length; i++) {
+        artists[i].addEventListener('click', function () {
+            console.log(artists[i].children[1].innerHTML)
+            let testdata = artists[i].children[1].innerHTML;
+            let test = document.getElementById('testArtist').innerHTML = testdata;
+        })
+    }
+}
+
