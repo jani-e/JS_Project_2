@@ -8,3 +8,26 @@ body {
 div {
     border: 1px solid white;
 }
+aside {
+    width: 250px;
+}
+
+#topArtists {
+    display: inline;
+    padding: 0px;
+}
+#topArtists li {
+    border: 1px solid gray;
+    padding: 5px;
+    font-size: 20px;
+}
+#topArtists li:hover {
+    background-color: aliceblue;
+}
+.artistIndex {
+    display: inline-block;
+    width: 20%;
+    padding-right: 5px;
+    color: red;
+    text-align: center;
+}
