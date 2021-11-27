@@ -9,24 +9,24 @@ div {
     border: 1px solid white;
 }
 aside {
-    width: 250px;
+    width: 300px;
 }
 
-#topArtists {
+#artistsList {
     display: inline;
     padding: 0px;
 }
-#topArtists li {
+#artistsList li {
     border: 1px solid gray;
     padding: 5px;
     font-size: 20px;
 }
-#topArtists li:hover {
+#artistsList li:hover {
     background-color: aliceblue;
 }
-.artistIndex {
+.artistPlaycount {
     display: inline-block;
-    width: 20%;
+
     padding-right: 5px;
     color: red;
     text-align: center;
