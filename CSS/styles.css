@@ -6,7 +6,10 @@ body {
     display: flex;
 }
 div {
-    border: 1px solid white;
+    border: 1px solid blue;
+}
+span {
+    border: 1px solid red;
 }
 aside {
     width: 300px;
@@ -24,10 +27,35 @@ aside {
 #artistsList li:hover {
     background-color: aliceblue;
 }
-.artistPlaycount {
+.artistRank {
     display: inline-block;
-
+    width: 20%;
     padding-right: 5px;
     color: red;
     text-align: center;
+}
+#artistAlbums {
+    display: inline;
+    list-style-type: none;
+}
+#artistAlbums li {
+    border: 1px solid gray;
+    padding: 5px;
+    font-size: 20px;
+}
+#artistAlbums li:hover {
+    background-color: aliceblue;
+}
+
+#albumSongs {
+    display: inline;
+    list-style-type: none;
+}
+#albumSongs li {
+    border: 1px solid gray;
+    padding: 5px;
+    font-size: 20px;
+}
+#artistAalbumSongslbums li:hover {
+    background-color: aliceblue;
 }
