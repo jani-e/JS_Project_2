@@ -12,19 +12,16 @@ function getArtists() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             artistsData = JSON.parse(xmlhttp.responseText);
-            /*artistsData.sort(function(a, b) { //ei toimi
-                return parseInt(a.artists.artist["#playcount"]) - parseInt(b.artists.artist["#playcount"]);
-            });*/
-            ul.removeChild(ul.childNodes[1]);
+            //ul.removeChild(ul.childNodes[1]);
             for (let i = 0; i < artistsData.artists.artist.length; i++) {
                 let listItem = document.createElement('li');
-                //let artistPlaycount = document.createElement('span');
+                let artistRank = document.createElement('span');
                 let artistName = document.createElement('span');
-                //artistPlaycount.innerHTML = artistsData.artists.artist[i].playcount;
-                //artistPlaycount.setAttribute('class', 'artistPlaycount');
+                artistRank.innerHTML = "#" + (i+1);
+                artistRank.setAttribute('class', 'artistRank');
                 artistName.innerHTML = artistsData.artists.artist[i].name;
+                listItem.appendChild(artistRank);
                 listItem.appendChild(artistName);
-                //listItem.appendChild(artistPlaycount);
                 ul.appendChild(listItem);
             }
             console.log("getArtists")
@@ -41,7 +38,7 @@ function listenArtist() {
     let artists = document.getElementById('artistsList').children;
     for (let value of artists) {
         value.addEventListener('click', function () {
-            let selectedArtistName = value.children[0].innerHTML; //muuta children[1], jos otat takaisin artistPlaycount
+            let selectedArtistName = value.children[1].innerHTML;
             updateArtist(selectedArtistName);
         })
     }
@@ -71,18 +68,41 @@ function getAlbums(selectedArtistName) {
     let ul = document.getElementById('artistAlbums');
     ul.innerHTML = null; //resets albums list
     let artistName = selectedArtistName;
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+ artistName +"&api_key=" + api + "&format=json";
+    let resultLimit = 20;
+    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist="+ artistName +"&api_key=" + api + "&format=json";
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
+            let albumHeader = document.getElementById('albumHeader');
+            albumHeader.innerHTML = selectedArtistName + "'s Top " + resultLimit + " albums";
             for (let i = 0; i < data.topalbums.album.length; i++) {
                 let albumItem = document.createElement('li');
-                let albumName = document.createElement('span');
+                albumItem.setAttribute('class', 'flex-container');
+
+                let leftBlock = document.createElement('div');
+                let rightBlock = document.createElement('div');
+
+                let albumImage = document.createElement('img');
+                let albumName = document.createElement('h3');
+                let albumArtist = document.createElement('span');
+                let albumPlayCount = document.createElement('span');
+
+                albumImage.src = data.topalbums.album[i].image[2]["#text"];
                 albumName.innerHTML = data.topalbums.album[i].name;
-                albumItem.appendChild(albumName);
+                albumArtist.innerHTML = artistName;
+                albumPlayCount.innerHTML = "<br><br>Playcount: " + data.topalbums.album[i].playcount;
+
+                leftBlock.appendChild(albumImage);
+                rightBlock.appendChild(albumName);
+                rightBlock.appendChild(albumArtist);
+                rightBlock.appendChild(albumPlayCount);
+
+                albumItem.appendChild(leftBlock);
+                albumItem.appendChild(rightBlock);
+
                 ul.appendChild(albumItem);
             }
             console.log("getAlbums")
@@ -104,6 +124,8 @@ function getSongs(album) {
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
+            console.log("getSongs")
+            console.log(data)
             for (let i = 0; i < data.album.tracks.track.length; i++) {
                 let songItem = document.createElement('li');
                 let songName = document.createElement('span');
@@ -111,18 +133,31 @@ function getSongs(album) {
                 songItem.appendChild(songName);
                 ul.appendChild(songItem);
             }
-            console.log("getSongs")
-            console.log(data)
+            
         }
     }
 }
 
 function listenAlbum() {
     let albums = document.getElementById('artistAlbums').children;
+    console.log(albums)
     for (let i = 0; i < albums.length; i++) {
         albums[i].addEventListener('click', function() {
-            let selectedAlbum = albums[i].children[0].innerHTML;
+            let selectedAlbum = albums[i].children[1].children[0].innerHTML;
+            console.log("test:" + selectedAlbum)
             getSongs(selectedAlbum);
         })
     }
 }
+
+/*
+todo:list
+
+error: bruno mars albums not showing any songs
+error: null albums
+display current selection (artist, album) css selected
+add scrollbar to top albums?
+refactor code: currentArtistName variable outside of functions: update functions?
+
+feature: ask api key and save it to session storage? no if shown in linkedin, visitor doesnt have api
+*/
