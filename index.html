@@ -22,8 +22,8 @@
     </header>
     <main class="flex-container">
         <aside>
-            <h2>Top Artists</h2>
-            <ul id="topArtists">
+            <h2>Artists</h2>
+            <ul id="artistsList">
                 <li>
                     <p>Something went wrong</p>
                 </li>
@@ -31,15 +31,20 @@
         </aside>
         <section>
             <div>
-                <h2>Info: Artist.name + artist.picture</h2>
-                <p id="testArtist"></p>
+                <h2 id="artistName"></h2>
+                <p id="artistSummary"></p>
+                <!-- <img id="artistImage" src="#" alt="Image of the artist"> -->
             </div>
             <div class="flex-container">
                 <div>
                     <h3>albums of the artist</h3>
+                    <ul id="artistAlbums">
+                    </ul>
                 </div>
                 <div>
                     <h3>songs of the album</h3>
+                    <ul id="albumSongs">
+                    </ul>
                 </div>
             </div>
         </section>
