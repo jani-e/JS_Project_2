@@ -107,13 +107,13 @@ function getAlbums(selectedArtistName) {
             }
             console.log("getAlbums")
             console.log(data)
-            getSongs(data.topalbums.album[0].name);
+            getAlbumInfo(data.topalbums.album[0].name);
             listenAlbum();
         }
     }
 }
 
-function getSongs(album) {
+function getAlbumInfo(album) {
     let ul = document.getElementById('albumSongs');
     ul.innerHTML = null; //resets songs list
     let albumName = album;
@@ -140,12 +140,11 @@ function getSongs(album) {
 
 function listenAlbum() {
     let albums = document.getElementById('artistAlbums').children;
-    console.log(albums)
     for (let i = 0; i < albums.length; i++) {
         albums[i].addEventListener('click', function() {
             let selectedAlbum = albums[i].children[1].children[0].innerHTML;
             console.log("test:" + selectedAlbum)
-            getSongs(selectedAlbum);
+            getAlbumInfo(selectedAlbum);
         })
     }
 }
