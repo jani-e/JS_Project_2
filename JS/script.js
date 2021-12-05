@@ -1,50 +1,73 @@
 const api = getApiKey(); //apikey temporary solution
 let currentArtistName = null;
+getArtists();
 
-function getArtists() {
-    let artistsData = null;
-    let ul = document.getElementById('artistsList');
-    let limit = 20;
-    const url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=" + limit + "&api_key=" + api + "&format=json";
+function apiCall(url, callbackFunction) { //reduces repetive code for xmlhttp, accepts url parameter, fetches response from server and calls function with response attached
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            artistsData = JSON.parse(xmlhttp.responseText);
-            for (let i = 0; i < artistsData.artists.artist.length; i++) {
-                let listItem = document.createElement('li');
-                let artistRank = document.createElement('span');
-                let artistName = document.createElement('span');
-                artistRank.innerHTML = "#" + (i + 1);
-                artistRank.setAttribute('class', 'artistRank');
-                artistName.innerHTML = artistsData.artists.artist[i].name;
-                listItem.appendChild(artistRank);
-                listItem.appendChild(artistName);
-                ul.appendChild(listItem);
-            }
-            console.log("getArtists")
-            console.log(artistsData)
-            updateArtist(artistsData.artists.artist[0].name);
-            listenArtist();
+            let response = JSON.parse(xmlhttp.responseText);
+            callbackFunction(response);
         }
     }
 }
-let body = document.body;
-body.addEventListener("load", getArtists());
+
+function getArtists() {
+    let limit = 20;
+    let url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=" + limit + "&api_key=" + api + "&format=json";
+    apiCall(url, showArtists);
+}
+
+function showArtists(response) {
+    let ul = document.getElementById('artistsList');
+    let artistsData = response;
+    console.log(artistsData)
+    for (let i = 0; i < artistsData.artists.artist.length; i++) {
+        let listItem = document.createElement('li');
+        let artistRank = document.createElement('span');
+        let artistName = document.createElement('span');
+        artistRank.innerHTML = "#" + (i + 1);
+        artistRank.setAttribute('class', 'artistRank');
+        artistName.innerHTML = artistsData.artists.artist[i].name;
+        listItem.appendChild(artistRank);
+        listItem.appendChild(artistName);
+        ul.appendChild(listItem);
+    }
+    console.log("getArtists")
+    console.log(artistsData)
+    getArtist(artistsData.artists.artist[0].name);
+    listenArtist();
+}
 
 function listenArtist() {
     let artists = document.getElementById('artistsList').children;
     for (let value of artists) {
         value.addEventListener('click', function () {
             let selectedArtistName = value.children[1].innerHTML;
-            updateArtist(selectedArtistName);
+            getArtist(selectedArtistName);
         })
     }
 }
 
-function updateArtist(selectedArtistName) {
+function getArtist(selectedArtistName) {
     currentArtistName = selectedArtistName;
+    let artistName = document.getElementById('artistName');
+    artistName.innerHTML = selectedArtistName;
+    let url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + selectedArtistName + "&api_key=" + api + "&format=json";
+    apiCall(url, updateArtist)
+}
+
+function updateArtist(response) {
+    let artistSummary = document.getElementById('artistSummary');
+    console.log(response)
+    artistSummary.innerHTML = response.artist.bio.summary;
+    getAlbums(currentArtistName)
+}
+
+function xupdateArtist(selectedArtistName) { //poista
+    /*currentArtistName = selectedArtistName;
     let artistName = document.getElementById('artistName');
     let artistSummary = document.getElementById('artistSummary');
     artistName.innerHTML = selectedArtistName;
@@ -54,12 +77,14 @@ function updateArtist(selectedArtistName) {
     xmlhttp.send();
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            let data = JSON.parse(xmlhttp.responseText);
+            let data = JSON.parse(xmlhttp.responseText);*/
             artistSummary.innerHTML = data.artist.bio.summary;
             getAlbums(selectedArtistName);
         }
-    }
-}
+    //}
+//}
+
+//jatka refactor
 
 function getAlbums(selectedArtistName) {
     let ul = document.getElementById('artistAlbums');
@@ -214,6 +239,8 @@ error: bruno mars albums not showing any songs
         + kanye west 808
 error: null albums
 display current selection (artist, album) css selected
+
+add track info
 
 refactor code: currentArtistName variable outside of functions: update functions?
 combine xmlhttp calls together to accept parameters and return response
