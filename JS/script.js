@@ -114,6 +114,10 @@ function getAlbums(selectedArtistName) {
 }
 
 function getAlbumInfo(album) {
+    let name = document.getElementById('albumName');
+    let artist = document.getElementById('albumArtist');
+    let published = document.getElementById('albumPublished');
+    let summary = document.getElementById('albumSummary');
     let ul = document.getElementById('albumSongs');
     ul.innerHTML = null; //resets songs list
     let albumName = album;
@@ -126,6 +130,10 @@ function getAlbumInfo(album) {
             let data = JSON.parse(xmlhttp.responseText);
             console.log("getSongs")
             console.log(data)
+            name.innerHTML = data.album.name;
+            artist.innerHTML = data.album.artist;
+            published.innerHTML = data.album.wiki.published.substring(0, 11);
+            summary.innerHTML = data.album.wiki.summary;
             for (let i = 0; i < data.album.tracks.track.length; i++) {
                 let songItem = document.createElement('li');
                 let songName = document.createElement('span');
@@ -153,6 +161,7 @@ function listenAlbum() {
 todo:list
 
 error: bruno mars albums not showing any songs
+        + kanye west 808
 error: null albums
 display current selection (artist, album) css selected
 add scrollbar to top albums?
