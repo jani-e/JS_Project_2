@@ -47,6 +47,10 @@ section {
     color: red;
     text-align: center;
 }
+#albumsDiv {
+    max-height: 600px;
+    overflow-y: auto;
+}
 #artistAlbums {
     display: inline;
     list-style-type: none;
