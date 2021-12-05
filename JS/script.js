@@ -12,12 +12,11 @@ function getArtists() {
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             artistsData = JSON.parse(xmlhttp.responseText);
-            //ul.removeChild(ul.childNodes[1]);
             for (let i = 0; i < artistsData.artists.artist.length; i++) {
                 let listItem = document.createElement('li');
                 let artistRank = document.createElement('span');
                 let artistName = document.createElement('span');
-                artistRank.innerHTML = "#" + (i+1);
+                artistRank.innerHTML = "#" + (i + 1);
                 artistRank.setAttribute('class', 'artistRank');
                 artistName.innerHTML = artistsData.artists.artist[i].name;
                 listItem.appendChild(artistRank);
@@ -26,7 +25,7 @@ function getArtists() {
             }
             console.log("getArtists")
             console.log(artistsData)
-            updateArtist(artistsData.artists.artist[0].name); //show top 1 artist initially
+            updateArtist(artistsData.artists.artist[0].name);
             listenArtist();
         }
     }
@@ -48,17 +47,15 @@ function updateArtist(selectedArtistName) {
     currentArtistName = selectedArtistName;
     let artistName = document.getElementById('artistName');
     let artistSummary = document.getElementById('artistSummary');
-    //let artistImage = document.getElementById('artistImage');
     artistName.innerHTML = selectedArtistName;
     const url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + selectedArtistName + "&api_key=" + api + "&format=json";
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
             artistSummary.innerHTML = data.artist.bio.summary;
-            //artistImage.src = data.artist.image[1]["#text"];
             getAlbums(selectedArtistName);
         }
     }
@@ -69,11 +66,11 @@ function getAlbums(selectedArtistName) {
     ul.innerHTML = null; //resets albums list
     let artistName = selectedArtistName;
     let resultLimit = 20;
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist="+ artistName +"&api_key=" + api + "&format=json";
+    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist=" + artistName + "&api_key=" + api + "&format=json";
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
             let albumHeader = document.getElementById('albumHeader');
@@ -125,7 +122,7 @@ function getAlbumInfo(album) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
             console.log("getSongs")
@@ -141,7 +138,7 @@ function getAlbumInfo(album) {
                 songItem.appendChild(songName);
                 ul.appendChild(songItem);
             }
-            
+
         }
     }
 }
@@ -149,7 +146,7 @@ function getAlbumInfo(album) {
 function listenAlbum() {
     let albums = document.getElementById('artistAlbums').children;
     for (let i = 0; i < albums.length; i++) {
-        albums[i].addEventListener('click', function() {
+        albums[i].addEventListener('click', function () {
             let selectedAlbum = albums[i].children[1].children[0].innerHTML;
             console.log("test:" + selectedAlbum)
             getAlbumInfo(selectedAlbum);
@@ -157,13 +154,36 @@ function listenAlbum() {
     }
 }
 
-
-document.getElementById('searchText').addEventListener('keyup', function(event) {
+document.getElementById('searchText').addEventListener('keyup', function (event) {
     if (event.code === 'Enter') {
         searchArtist();
     }
+    let datalist = document.getElementById('suggestionsList');
+    datalist.innerHTML = null;
+    let searchText = document.getElementById('searchText');
+    let searchValue = searchText.value.trim();
+    if (searchValue.length > 3 && searchValue.length < 10) {
+        const url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api + "&format=json";
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                let data = JSON.parse(xmlhttp.responseText);
+                console.log(data)
+
+                for (let i = 0; i < 5 && i < data.results.artistmatches.artist.length; i++) {
+                    let option = document.createElement('option');
+                    option.innerHTML = data.results.artistmatches.artist[i].name;
+                    console.log(data.results.artistmatches.artist[i].name);
+                    datalist.appendChild(option);
+                }
+                datalist.focus();
+            }
+        }
+    }
 });
-document.getElementById('searchSubmit').addEventListener('click', function() {
+document.getElementById('searchSubmit').addEventListener('click', function () {
     searchArtist();
 });
 
@@ -172,11 +192,11 @@ function searchArtist() {
     let searchValue = searchText.value.trim();
     searchText.value = null; //reset search textfield
     console.log(searchValue)
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api +"&format=json";
+    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api + "&format=json";
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
             console.log(data);
@@ -188,16 +208,13 @@ function searchArtist() {
 
 
 /*
-todo:list
+todo:
 
 error: bruno mars albums not showing any songs
         + kanye west 808
 error: null albums
 display current selection (artist, album) css selected
-add scrollbar to top albums?
+
 refactor code: currentArtistName variable outside of functions: update functions?
-
-feature: ask api key and save it to session storage? no if shown in linkedin, visitor doesnt have api
-
 combine xmlhttp calls together to accept parameters and return response
 */
