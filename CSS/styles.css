@@ -47,7 +47,7 @@ section {
     color: red;
     text-align: center;
 }
-#albumsDiv {
+#albumListDiv {
     max-height: 600px;
     overflow-y: auto;
 }
