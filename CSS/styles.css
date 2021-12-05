@@ -2,21 +2,34 @@ body {
     background-color: black;
     color: white;
 }
+main {
+    margin: 0px 7%;
+}
 .flex-container {
     display: flex;
 }
-div {
+/*div {
     border: 1px solid blue;
 }
 span {
     border: 1px solid red;
-}
+}*/
 aside {
-    width: 300px;
+    width: 20%;
+}
+section {
+    width: 80%;
+}
+#albumsDiv {
+    width: 40%;
+}
+#albumDetailsDiv {
+    width: 60%;
 }
 
 #artistsList {
     display: inline;
+    list-style-type: none;
     padding: 0px;
 }
 #artistsList li {
