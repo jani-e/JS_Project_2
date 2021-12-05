@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Jani Eriksson">
     <link rel="stylesheet" href="CSS/styles.css">
-    <script src="JS/hideMe.js"></script> <!--apikey temporary solution-->
+    <script src="JS/hideMe.js"></script>
+    <!--apikey temporary solution-->
     <script src="JS/script.js" defer></script>
     <link rel="icon" href="Images/favicon.ico" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS project: Ajax</title>
 </head>
+
 <body>
     <header class="flex-container">
         <div>
             <h1>Project2</h1>
         </div>
         <div>
-            <!-- <form id="searchForm" name="searchForm"> -->
-                <input type="text" id="searchText" name="searchText" placeholder="Search artist here!">
-                <input type="submit" id="searchSubmit" name="searchSubmit" value="Search"></button>
-            <!-- </form> -->
+            <input type="text" id="searchText" name="searchText" list="suggestionsList"
+                placeholder="Search artist here!">
+            <input type="submit" id="searchSubmit" name="searchSubmit" value="Search"></button>
+            <datalist id="suggestionsList">
+            </datalist>
         </div>
     </header>
     <main class="flex-container">
@@ -36,7 +40,9 @@
             <div class="flex-container">
                 <div id="albumsDiv">
                     <h3 id="albumHeader"></h3>
-                    <ul id="artistAlbums"></ul>
+                    <div id="albumListDiv">
+                        <ul id="artistAlbums"></ul>
+                    </div>
                 </div>
                 <div id="albumDetailsDiv">
                     <h3 id="albumName"></h3>
@@ -49,4 +55,5 @@
         </section>
     </main>
 </body>
+
 </html>
