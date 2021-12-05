@@ -157,6 +157,36 @@ function listenAlbum() {
     }
 }
 
+
+document.getElementById('searchText').addEventListener('keyup', function(event) {
+    if (event.code === 'Enter') {
+        searchArtist();
+    }
+});
+document.getElementById('searchSubmit').addEventListener('click', function() {
+    searchArtist();
+});
+
+function searchArtist() {
+    let searchText = document.getElementById('searchText');
+    let searchValue = searchText.value.trim();
+    searchText.value = null; //reset search textfield
+    console.log(searchValue)
+    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api +"&format=json";
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            let data = JSON.parse(xmlhttp.responseText);
+            console.log(data);
+            updateArtist(data.results.artistmatches.artist[0].name);
+        }
+    }
+}
+
+
+
 /*
 todo:list
 
@@ -168,4 +198,6 @@ add scrollbar to top albums?
 refactor code: currentArtistName variable outside of functions: update functions?
 
 feature: ask api key and save it to session storage? no if shown in linkedin, visitor doesnt have api
+
+combine xmlhttp calls together to accept parameters and return response
 */
