@@ -29,7 +29,7 @@
     </header>
     <main class="flex-container">
         <aside>
-            <h2>Top 20 Artists</h2>
+            <h2>Top 20 Artists Last.fm</h2>
             <ul id="artistsList"></ul>
         </aside>
         <section>
@@ -39,16 +39,24 @@
             </div>
             <div class="flex-container">
                 <div id="albumsDiv">
-                    <h3 id="albumHeader"></h3>
+                    <h2 id="albumHeader"></h2>
                     <div id="albumListDiv">
                         <ul id="artistAlbums"></ul>
                     </div>
                 </div>
                 <div id="albumDetailsDiv">
-                    <h3 id="albumName"></h3>
-                    <p id="albumArtist"></p>
-                    <p id="albumPublished"></p>
-                    <p id="albumSummary"></p>
+                    <h2 id="albumName"></h2>
+                    <div class="flex-container">
+                        <div id="albumInfoLeft">
+                            <p id="albumArtist"></p>
+                            <p id="albumTracks"></p>
+                            <p id="albumPublished"></p>
+                        </div>
+                        <div id="albumInfoRight">
+                            <p id="albumSummary"></p>
+                        </div>
+                    </div>
+                    <h3 id="tracklist">Tracklist</h3>
                     <ul id="albumSongs"></ul>
                 </div>
             </div>
