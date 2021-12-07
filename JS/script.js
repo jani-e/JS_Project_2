@@ -1,5 +1,6 @@
 const api = getApiKey(); //apikey temporary solution
 let currentArtistName = null;
+let resultLimit = 20;
 getArtists();
 
 function apiCall(url, callbackFunction) { //reduces repetive code for xmlhttp, accepts url parameter, fetches response from server and calls function with response attached
@@ -63,109 +64,58 @@ function updateArtist(response) {
     let artistSummary = document.getElementById('artistSummary');
     console.log(response)
     artistSummary.innerHTML = response.artist.bio.summary;
-    getAlbums(currentArtistName)
+    getAlbums()
 }
 
-function xupdateArtist(selectedArtistName) { //poista
-    /*currentArtistName = selectedArtistName;
-    let artistName = document.getElementById('artistName');
-    let artistSummary = document.getElementById('artistSummary');
-    artistName.innerHTML = selectedArtistName;
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + selectedArtistName + "&api_key=" + api + "&format=json";
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            let data = JSON.parse(xmlhttp.responseText);*/
-            artistSummary.innerHTML = data.artist.bio.summary;
-            getAlbums(selectedArtistName);
-        }
-    //}
-//}
+function getAlbums() {
+    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist=" + currentArtistName + "&api_key=" + api + "&format=json";
+    apiCall(url, showAlbums)
+}
 
-//jatka refactor
-
-function getAlbums(selectedArtistName) {
+function showAlbums(response) {
     let ul = document.getElementById('artistAlbums');
     ul.innerHTML = null; //resets albums list
-    let artistName = selectedArtistName;
-    let resultLimit = 20;
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist=" + artistName + "&api_key=" + api + "&format=json";
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            let data = JSON.parse(xmlhttp.responseText);
-            let albumHeader = document.getElementById('albumHeader');
-            albumHeader.innerHTML = selectedArtistName + "'s Top " + resultLimit + " albums";
-            for (let i = 0; i < data.topalbums.album.length; i++) {
-                let albumItem = document.createElement('li');
-                albumItem.setAttribute('class', 'flex-container');
+    let data = response;
+    let albumHeader = document.getElementById('albumHeader');
+    albumHeader.innerHTML = currentArtistName + "'s Top " + resultLimit + " albums";
+    for (let i = 0; i < data.topalbums.album.length; i++) {
+        let albumItem = document.createElement('li');
+        albumItem.setAttribute('class', 'flex-container');
 
-                let leftBlock = document.createElement('div');
-                let rightBlock = document.createElement('div');
+        let leftBlock = document.createElement('div');
+        let rightBlock = document.createElement('div');
 
-                let albumImage = document.createElement('img');
-                let albumName = document.createElement('h3');
-                let albumArtist = document.createElement('span');
-                let albumPlayCount = document.createElement('span');
+        let albumImage = document.createElement('img');
+        let albumName = document.createElement('h3');
+        let albumArtist = document.createElement('span');
+        let albumPlayCount = document.createElement('span');
 
-                albumImage.src = data.topalbums.album[i].image[2]["#text"];
-                albumName.innerHTML = data.topalbums.album[i].name;
-                albumArtist.innerHTML = artistName;
-                albumPlayCount.innerHTML = "<br><br>Playcount: " + data.topalbums.album[i].playcount;
+        albumImage.src = data.topalbums.album[i].image[2]["#text"];
+        albumName.innerHTML = data.topalbums.album[i].name;
+        albumArtist.innerHTML = currentArtistName;
+        albumPlayCount.innerHTML = "<br><br>Playcount: " + data.topalbums.album[i].playcount;
 
-                leftBlock.appendChild(albumImage);
-                rightBlock.appendChild(albumName);
-                rightBlock.appendChild(albumArtist);
-                rightBlock.appendChild(albumPlayCount);
+        leftBlock.appendChild(albumImage);
+        rightBlock.appendChild(albumName);
+        rightBlock.appendChild(albumArtist);
+        rightBlock.appendChild(albumPlayCount);
 
-                albumItem.appendChild(leftBlock);
-                albumItem.appendChild(rightBlock);
+        albumItem.appendChild(leftBlock);
+        albumItem.appendChild(rightBlock);
 
-                ul.appendChild(albumItem);
-            }
-            console.log("getAlbums")
-            console.log(data)
-            getAlbumInfo(data.topalbums.album[0].name);
-            listenAlbum();
-        }
+        ul.appendChild(albumItem);
     }
+    console.log("getAlbums")
+    console.log(data)
+    getAlbumInfo(data.topalbums.album[0].name);
+    listenAlbum();
 }
 
-function getAlbumInfo(album) {
-    let name = document.getElementById('albumName');
-    let artist = document.getElementById('albumArtist');
-    let published = document.getElementById('albumPublished');
-    let summary = document.getElementById('albumSummary');
-    let ul = document.getElementById('albumSongs');
-    ul.innerHTML = null; //resets songs list
-    let albumName = album;
-    const url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + api + "&artist=" + currentArtistName + "&album=" + albumName + "&format=json";
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            let data = JSON.parse(xmlhttp.responseText);
-            console.log("getSongs")
-            console.log(data)
-            name.innerHTML = data.album.name;
-            artist.innerHTML = data.album.artist;
-            published.innerHTML = data.album.wiki.published.substring(0, 11);
-            summary.innerHTML = data.album.wiki.summary;
-            for (let i = 0; i < data.album.tracks.track.length; i++) {
-                let songItem = document.createElement('li');
-                let songName = document.createElement('span');
-                songName.innerHTML = data.album.tracks.track[i].name;
-                songItem.appendChild(songName);
-                ul.appendChild(songItem);
-            }
 
-        }
-    }
+
+function getAlbumInfo(albumName) {
+    const url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + api + "&artist=" + currentArtistName + "&album=" + albumName + "&format=json";
+    apiCall(url, showAlbumInfo);
 }
 
 function listenAlbum() {
@@ -178,6 +128,31 @@ function listenAlbum() {
         })
     }
 }
+
+function showAlbumInfo(response) {
+    let name = document.getElementById('albumName');
+    let artist = document.getElementById('albumArtist');
+    let published = document.getElementById('albumPublished');
+    let summary = document.getElementById('albumSummary');
+    let ul = document.getElementById('albumSongs');
+    ul.innerHTML = null; //resets songs list
+    let data = response;
+    console.log("getSongs")
+    console.log(data)
+    name.innerHTML = data.album.name;
+    artist.innerHTML = data.album.artist;
+    published.innerHTML = data.album.wiki.published.substring(0, 11);
+    summary.innerHTML = data.album.wiki.summary;
+    for (let i = 0; i < data.album.tracks.track.length; i++) {
+        let songItem = document.createElement('li');
+        let songName = document.createElement('span');
+        songName.innerHTML = data.album.tracks.track[i].name;
+        songItem.appendChild(songName);
+        ul.appendChild(songItem);
+    }
+}
+
+//searchbar
 
 document.getElementById('searchText').addEventListener('keyup', function (event) {
     if (event.code === 'Enter') {
