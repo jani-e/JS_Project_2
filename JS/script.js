@@ -132,6 +132,7 @@ function listenAlbum() {
 function showAlbumInfo(response) {
     let name = document.getElementById('albumName');
     let artist = document.getElementById('albumArtist');
+    let tracks = document.getElementById('albumTracks');
     let published = document.getElementById('albumPublished');
     let summary = document.getElementById('albumSummary');
     let ul = document.getElementById('albumSongs');
@@ -140,14 +141,41 @@ function showAlbumInfo(response) {
     console.log("getSongs")
     console.log(data)
     name.innerHTML = data.album.name;
-    artist.innerHTML = data.album.artist;
-    published.innerHTML = data.album.wiki.published.substring(0, 11);
-    summary.innerHTML = data.album.wiki.summary;
+    artist.innerHTML = "Artist: " + data.album.artist;
+    tracks.innerHTML = "Tracks: " + data.album.tracks.track.length;
+    published.innerHTML = "Published: " + data.album.wiki.published.substring(0, 11);
+    summary.innerHTML = "Summary<br>" + data.album.wiki.summary;
     for (let i = 0; i < data.album.tracks.track.length; i++) {
         let songItem = document.createElement('li');
+        songItem.setAttribute('class', 'flex-container');
+
+        let leftBlock = document.createElement('div');
+        let rightBlock = document.createElement('div');
+
         let songName = document.createElement('span');
+        let songDuration = document.createElement('span');
+        let songUrl = document.createElement('a');
+
         songName.innerHTML = data.album.tracks.track[i].name;
-        songItem.appendChild(songName);
+
+        let trackDuration = data.album.tracks.track[i].duration;
+        let minutes = Math.floor(trackDuration / 60);
+        let seconds = trackDuration % 60;
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+        let duration = "<br>Length: " + minutes + ":" + seconds;
+        songDuration.innerHTML = duration;
+
+        songUrl.innerHTML = "Listen track";
+        songUrl.href = data.album.tracks.track[i].url;
+
+        leftBlock.appendChild(songName);
+        leftBlock.appendChild(songDuration);
+        rightBlock.appendChild(songUrl);
+
+        songItem.appendChild(leftBlock);
+        songItem.appendChild(rightBlock);
         ul.appendChild(songItem);
     }
 }
