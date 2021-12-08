@@ -10,7 +10,7 @@ function apiCall(url, callbackFunction) { //reduces repetive code for xmlhttp, a
     xmlhttp.onreadystatechange = function () {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let response = JSON.parse(xmlhttp.responseText);
-            callbackFunction(response);
+            callbackFunction(response); //call function based on parameters and add server response to it as parameter
         }
     }
 }
@@ -112,8 +112,6 @@ function showAlbums(response) {
     listenAlbum();
 }
 
-
-
 function getAlbumInfo(albumName) {
     if (albumName.includes("+")) { //error handling if name contains + -sign
         albumName = albumName.replace(/\+/g, "%2b"); //replace plus with url ascii enconding value
@@ -194,21 +192,14 @@ function showAlbumInfo(response) {
             songItem.appendChild(songDurationDiv);
             songItem.appendChild(songUrlDiv);
     
-    
             ul.appendChild(songItem);
         }
     }
-    
-    
-
-    
-    
-    
 }
 
 //searchbar
 
-document.getElementById('searchText').addEventListener('keyup', function (event) {
+document.getElementById('searchText').addEventListener('keyup', function (event) { //listens user input
     if (event.code === 'Enter') {
         searchArtist();
     }
@@ -237,7 +228,10 @@ document.getElementById('searchText').addEventListener('keyup', function (event)
         }
     }
 });
-document.getElementById('searchSubmit').addEventListener('click', function () {
+document.getElementById('searchText').addEventListener('change', function () { //triggers when option is selected from list
+    searchArtist();
+});
+document.getElementById('searchSubmit').addEventListener('click', function () { //triggers when clicking search button
     searchArtist();
 });
 
@@ -254,19 +248,7 @@ function searchArtist() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             let data = JSON.parse(xmlhttp.responseText);
             console.log(data);
-            updateArtist(data.results.artistmatches.artist[0].name);
+            getArtist(data.results.artistmatches.artist[0].name);
         }
     }
 }
-
-
-
-/*
-todo:
-
-display current selection (artist, album) css selected
-
-refactor code: currentArtistName variable outside of functions: update functions?
-combine xmlhttp calls together to accept parameters and return response
-search not refactored yet, not working atm
-*/
