@@ -144,7 +144,7 @@ function showAlbumInfo(response) {
     let data = response;
     console.log("getSongs")
     console.log(data)
-    name.innerHTML = data.album.name + " - album";
+    name.innerHTML = data.album.name;
     artist.innerHTML = "Artist: " + data.album.artist;
 
     tracks.innerHTML = "Tracks: N/A";

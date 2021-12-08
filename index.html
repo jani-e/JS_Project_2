@@ -16,19 +16,17 @@
 
 <body>
     <header>
-        <div>
             <h1>JS project 2: AJAX - Last.fm</h1>
-        </div>
-        <div>
-            <input type="text" id="searchText" name="searchText" list="suggestionsList"
-                placeholder="Search artist here!">
-            <input type="submit" id="searchSubmit" name="searchSubmit" value="Search"></button>
-            <datalist id="suggestionsList">
-            </datalist>
-        </div>
     </header>
     <main class="flex-container">
         <aside>
+            <div>
+                <input type="text" id="searchText" name="searchText" list="suggestionsList"
+                    placeholder="Search artist here!">
+                <input type="submit" id="searchSubmit" name="searchSubmit" value="Search"></button>
+                <datalist id="suggestionsList">
+                </datalist>
+            </div>
             <h2>Top 20 Artists Last.fm</h2>
             <ul id="artistsList"></ul>
         </aside>

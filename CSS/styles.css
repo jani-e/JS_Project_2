@@ -1,6 +1,5 @@
 body {
-    background-color: black;
-    color: white;
+    background-color: rgb(42, 130, 151);
 }
 main, header {
     margin: 0px;
@@ -15,22 +14,36 @@ main, header {
         margin: 0px 14%;
     }
 }
+h1, h2 {
+    color: rgb(244,153,62);
+    text-shadow: 2px 2px 2px black;
+}
 .flex-container {
     display: flex;
 }
 aside {
-    width: 20%;
+    width: 25%;
     padding-right: 20px;
+    background-color: rgb(69, 153, 173);
+    padding: 10px;
 }
 section {
     width: 80%;
+    background-color: rgb(69, 153, 173);
+    padding: 10px;
+}
+#artistName, #artistSummary {
+    padding: 0px 100px;
 }
 #albumsDiv {
     width: 45%;
+    padding: 20px;
+    background-color: rgb(108,184,201);
 }
 #albumDetailsDiv {
     width: 55%;
-    padding-left: 20px;
+    padding: 20px;
+    background-color: rgb(108,184,201);
 }
 #artistsList {
     display: inline;
@@ -38,18 +51,20 @@ section {
     padding: 0px;
 }
 #artistsList li {
-    border: 1px solid gray;
+    border: 1px solid rgb(17,111,133);
+    background-color: rgb(255,218,133);
+    color: rgb(165, 121, 18);
     padding: 5px;
     font-size: 20px;
 }
 #artistsList li:hover {
-    background-color: aliceblue;
+    background-color: rgb(215,117,21);
+    color: rgb(255,194,133);
 }
 .artistRank {
     display: inline-block;
     width: 20%;
     padding-right: 5px;
-    color: red;
     text-align: center;
 }
 #albumListDiv {
@@ -62,12 +77,15 @@ section {
     padding: 0px;
 }
 #artistAlbums li {
-    border: 1px solid gray;
+    border: 1px solid rgb(17,111,133);
+    background-color: rgb(255,218,133);
+    color: rgb(165, 121, 18);
     padding: 5px;
     font-size: 20px;
 }
 #artistAlbums li:hover {
-    background-color: aliceblue;
+    background-color: rgb(215,117,21);
+    color: rgb(255,194,133);
 }
 .imageDiv {
     margin-right: 20px;
@@ -83,7 +101,6 @@ section {
 }
 #tracklist {
     margin-top: 0px;
-    padding-left: 20px;
 }
 #tracklistDiv {
     max-height: 468px;
@@ -95,11 +112,14 @@ section {
     padding: 0px;
 }
 #albumSongs li {
-    border: 1px solid gray;
+    border: 1px solid rgb(17,111,133);
+    background-color: rgb(255,218,133);
+    color: rgb(165, 121, 18);
     padding-left: 20px;
 }
 #albumSongs li:hover {
-    background-color: aliceblue;
+    background-color: rgb(215,117,21);
+    color: rgb(255,194,133);
 }
 #albumSongs div {
     align-self: center;
