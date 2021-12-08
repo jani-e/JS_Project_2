@@ -83,6 +83,7 @@ function showAlbums(response) {
         albumItem.setAttribute('class', 'flex-container');
 
         let leftBlock = document.createElement('div');
+        leftBlock.setAttribute('class', 'imageDiv');
         let rightBlock = document.createElement('div');
 
         let albumImage = document.createElement('img');
@@ -114,8 +115,13 @@ function showAlbums(response) {
 
 
 function getAlbumInfo(albumName) {
+    if (albumName.includes("+")) { //error handling if name contains + -sign
+        albumName = albumName.replace(/\+/g, "%2b"); //replace plus with url ascii enconding value
+    } else if (albumName.includes("&amp;")) { //error handling if name contains & -sign, does not always work
+        albumName = albumName.replace(/\&amp;/g, "%26"); //replace & with url ascii enconding value
+    }
     const url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + api + "&artist=" + currentArtistName + "&album=" + albumName + "&format=json";
-    apiCall(url, showAlbumInfo);
+    apiCall(url, showAlbumInfo); //call function apiCall with url and next function to go
 }
 
 function listenAlbum() {
@@ -140,44 +146,64 @@ function showAlbumInfo(response) {
     let data = response;
     console.log("getSongs")
     console.log(data)
-    name.innerHTML = data.album.name;
+    name.innerHTML = data.album.name + " - album";
     artist.innerHTML = "Artist: " + data.album.artist;
-    tracks.innerHTML = "Tracks: " + data.album.tracks.track.length;
-    published.innerHTML = "Published: " + data.album.wiki.published.substring(0, 11);
-    summary.innerHTML = "Summary<br>" + data.album.wiki.summary;
-    for (let i = 0; i < data.album.tracks.track.length; i++) {
-        let songItem = document.createElement('li');
-        songItem.setAttribute('class', 'flex-container');
 
-        let leftBlock = document.createElement('div');
-        let rightBlock = document.createElement('div');
+    tracks.innerHTML = "Tracks: N/A";
+    published.innerHTML = "Published: N/A";
+    summary.innerHTML = "Summary<br><br> N/A"
 
-        let songName = document.createElement('span');
-        let songDuration = document.createElement('span');
-        let songUrl = document.createElement('a');
-
-        songName.innerHTML = data.album.tracks.track[i].name;
-
-        let trackDuration = data.album.tracks.track[i].duration;
-        let minutes = Math.floor(trackDuration / 60);
-        let seconds = trackDuration % 60;
-        if (seconds < 10) {
-            seconds = "0" + seconds;
+    if (data.album.tracks.track.length !== undefined) { //some albums in json api are missing tracks, will keep and display N/A values if api info missing
+        tracks.innerHTML = "Tracks: " + data.album.tracks.track.length;
+        published.innerHTML = "Published: " + data.album.wiki.published.substring(0, 11);
+        summary.innerHTML = "Summary<br><br>" + data.album.wiki.summary;
+        for (let i = 0; i < data.album.tracks.track.length; i++) {
+            let songItem = document.createElement('li');
+            songItem.setAttribute('class', 'flex-container');
+    
+            let songName = document.createElement('h3');
+            let songNameDiv = document.createElement('div');
+            songNameDiv.setAttribute('class', 'divLeft');
+            songNameDiv.appendChild(songName);
+    
+            let songDuration = document.createElement('p');
+            let songDurationDiv = document.createElement('div');
+            songDurationDiv.setAttribute('class', 'divCenter');
+            songDurationDiv.appendChild(songDuration);
+    
+            let songUrl = document.createElement('a');
+            let songUrlDiv = document.createElement('div');
+            songUrlDiv.setAttribute('class', 'divRight');
+            songUrlDiv.appendChild(songUrl);
+    
+            songName.innerHTML = (i+1) + " - " + data.album.tracks.track[i].name;
+    
+            let trackDuration = data.album.tracks.track[i].duration;
+            let minutes = Math.floor(trackDuration / 60);
+            let seconds = trackDuration % 60;
+            if (seconds < 10) {
+                seconds = "0" + seconds;
+            }
+            let duration = minutes + ":" + seconds;
+            songDuration.innerHTML = duration;
+    
+            songUrl.innerHTML = "Listen track";
+            songUrl.href = data.album.tracks.track[i].url;
+    
+            songItem.appendChild(songNameDiv);
+            songItem.appendChild(songDurationDiv);
+            songItem.appendChild(songUrlDiv);
+    
+    
+            ul.appendChild(songItem);
         }
-        let duration = "<br>Length: " + minutes + ":" + seconds;
-        songDuration.innerHTML = duration;
-
-        songUrl.innerHTML = "Listen track";
-        songUrl.href = data.album.tracks.track[i].url;
-
-        leftBlock.appendChild(songName);
-        leftBlock.appendChild(songDuration);
-        rightBlock.appendChild(songUrl);
-
-        songItem.appendChild(leftBlock);
-        songItem.appendChild(rightBlock);
-        ul.appendChild(songItem);
     }
+    
+    
+
+    
+    
+    
 }
 
 //searchbar
@@ -238,13 +264,9 @@ function searchArtist() {
 /*
 todo:
 
-error: bruno mars albums not showing any songs
-        + kanye west 808
-error: null albums
 display current selection (artist, album) css selected
-
-add track info
 
 refactor code: currentArtistName variable outside of functions: update functions?
 combine xmlhttp calls together to accept parameters and return response
+search not refactored yet, not working atm
 */
