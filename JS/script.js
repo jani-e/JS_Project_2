@@ -1,4 +1,4 @@
-const api = getApiKey(); //apikey temporary solution
+const api = API_KEY;
 let currentArtistName = null; //keeping record of current artist
 let resultLimit = 20; //limiting results from server response
 getArtists(); //functions starts once website is loaded fully
