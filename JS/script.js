@@ -17,7 +17,7 @@ function apiCall(url, callbackFunction) { //reduces repetive code for xmlhttp, a
 
 function getArtists() {
     let limit = 20; //artist limit
-    let url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=" + limit + "&api_key=" + api + "&format=json";
+    let url = "https://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&limit=" + limit + "&api_key=" + api + "&format=json";
     apiCall(url, showArtists); //send parameters url and next function to apiCall
 }
 
@@ -52,7 +52,7 @@ function getArtist(selectedArtistName) { //sets selected artist as current artis
     currentArtistName = selectedArtistName;
     let artistName = document.getElementById('artistName');
     artistName.innerHTML = selectedArtistName;
-    let url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + selectedArtistName + "&api_key=" + api + "&format=json";
+    let url = "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + selectedArtistName + "&api_key=" + api + "&format=json";
     apiCall(url, updateArtist) //send parameters url and next function to apiCall
 }
 
@@ -63,7 +63,7 @@ function updateArtist(response) { //receive response from apicall and update art
 }
 
 function getAlbums() { //sets url with parameters to get albums from current artist
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist=" + currentArtistName + "&api_key=" + api + "&format=json";
+    const url = "https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&limit=" + resultLimit + "&artist=" + currentArtistName + "&api_key=" + api + "&format=json";
     apiCall(url, showAlbums) //send parameters url and next function to apiCall
 }
 
@@ -110,7 +110,7 @@ function getAlbumInfo(albumName) { //function to get album info from server with
     } else if (albumName.includes("&amp;")) { //error handling if name contains & -sign, does not always work
         albumName = albumName.replace(/\&amp;/g, "%26"); //replace & with url ascii enconding value
     }
-    const url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + api + "&artist=" + currentArtistName + "&album=" + albumName + "&format=json";
+    const url = "https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + api + "&artist=" + currentArtistName + "&album=" + albumName + "&format=json";
     apiCall(url, showAlbumInfo); //send parameters url and next function to apiCall
 }
 
@@ -197,7 +197,7 @@ document.getElementById('searchText').addEventListener('keyup', function (event)
     let searchText = document.getElementById('searchText');
     let searchValue = searchText.value.trim(); //remove empty spaces before and after search text
     if (searchValue.length > 3 && searchValue.length < 10) { //start xmlhttp api call when there's more than 3 characters and max 10 characters
-        const url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api + "&format=json";
+        const url = "https://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api + "&format=json";
         let xmlhttp = new XMLHttpRequest(); //could also be replaced with apicall function
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
@@ -225,7 +225,7 @@ function searchArtist() { //fetch selected or written search value and send quer
     let searchText = document.getElementById('searchText');
     let searchValue = searchText.value.trim();
     searchText.value = null; //reset search textfield
-    const url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api + "&format=json";
+    const url = "https://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + searchValue + "&api_key=" + api + "&format=json";
     let xmlhttp = new XMLHttpRequest(); //could also be replaced with apicall function
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
