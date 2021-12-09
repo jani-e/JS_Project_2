@@ -1,4 +1,4 @@
-const api = API_KEY;
+const api = process.env.API_KEY; //api is stored in netlify
 let currentArtistName = null; //keeping record of current artist
 let resultLimit = 20; //limiting results from server response
 getArtists(); //functions starts once website is loaded fully
