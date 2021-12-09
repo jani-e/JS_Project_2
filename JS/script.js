@@ -158,6 +158,7 @@ function showAlbumInfo(response) { //shows album info and tracks
             songDurationDiv.appendChild(songDuration);
     
             let songUrl = document.createElement('a');
+            songUrl.setAttribute('target', '_blank');
             let songUrlDiv = document.createElement('div');
             songUrlDiv.setAttribute('class', 'divRight');
             songUrlDiv.appendChild(songUrl);

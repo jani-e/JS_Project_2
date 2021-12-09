@@ -68,7 +68,7 @@ section {
     text-align: center;
 }
 #albumListDiv {
-    max-height: 760px;
+    max-height: 960px;
     overflow-y: auto;
 }
 #artistAlbums {
